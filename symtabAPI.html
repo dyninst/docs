@@ -1,0 +1,670 @@
+<html title="symtabAPI specification">
+<head>
+ <style>
+  div{
+   margin:20px 0 20px 20px;
+   line-height:1.5em;
+   color:#000000;
+   font-size:0.94em;
+   font-family:"Lucida Grande","Lucida Sans Unicode",arial,sans-serif;
+  }
+ </style>
+</head>
+
+<body>
+<script type="text/javascript">
+function toggleVisible(id) {
+  var item = document.getElementById(id);
+  var value = item.style.display ? '' : 'none';
+  item.style.display = value;
+}
+
+function showAll() {
+  var divs = document.getElementsByTagName("div");
+  for(var n=0; n< divs.length;n++)
+  {
+  	if(divs[n].style.display == 'none')
+		divs[n].style.display = '';
+  }
+}
+
+function reset(){
+  var divs = document.getElementsByTagName("div");
+  for(var n=0;n<divs.length;n++)
+  {
+  	if(divs[n].id == "")
+	{
+		divs[n].style.display = '';
+	}
+	else
+	{
+		if(divs[n].id.substring(0,5) == "class")
+			divs[n].style.display = '';
+		else
+			divs[n].style.display = 'none';
+	}	
+	
+  }
+}
+
+</script>
+<a href='#' onclick='showAll(); return false;'> Show All Descriptions</a>
+<a href='#' onclick='reset();return false;'> Reset</a></br>
+<div><p>
+<u><h2>SymtabAPI Interface</h2></u>
+ This document describes the functions in the symtabAPI. The primary classes are Dyn_Symtab, Dyn_module, Dyn_Symbol, Dyn_Archive and Dyn_ExceptionBlock.<i>OFFSET</i> used in any of the functions below is of type <i>unsigned long.</i>
+</div>
+
+<div><a href='#' onclick='toggleVisible("class1"); return false;'>
+<h3>Class Dyn_Symtab</h3></a>
+The Dyn_Symtab class represents the entire SymtabAPI library. This class is responsible for the parsing of the Object file information and holding the data that can be accessed through lookup functions.
+</div>
+
+<div id="class1" style='display: ; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func1"); return false;'>
+<b>bool openFile( string &filename, Dyn_Symtab *&obj)</b>
+</a></div>
+<div id="func1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Parse an Object file. <i>filename</i> is the name of the Object file to be parsed. Returns true if the file is parsed without an error along with <i>obj</i> containing the pointer to the Dyn_Symtab class object. Returns false if there was an error.<i>getLastSymtabError()/printSymtabError()</i> should be called to find out the error details.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func2"); return false;'>
+<b>bool openFile( char *mem_image, size_t size, Dyn_Symtab *&obj)</b>
+</a></div>
+<div id="func2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Parse a memory image.<i>mem_image</i> is the pointer to the Object file that is in memory to be parsed. <i>size</i> is the size of the memory image. Returns true if the file is parsed without an error along with <i>obj</i> containing the pointer to the Dyn_Symtab class object. Returns false if there was an error.<i>getLastSymtabError()/printSymtabError()</i> should be called to find out the error details.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func3"); return false;'>
+<b> bool findSymbolByType(vector &lt;Dyn_Symbol *&gt; &ret, const string &name,
+                                Dyn_Symbol::SymbolType sType, bool isMangled = false,
+                                bool isRegex = false, bool checkCase = false);</b>
+</a></div>
+<div id="func3" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Find and return a vector of symbols of the type <i>sType</i> where the name matches the given Mangled/Pretty name based on the <i>isMangled</i> flag. <i>ret</i> contains the symbols found if any. The return value is false if there is no such function name or else true is returned. For any other error that may occur a call to getLastSymtabError() should be made. If the <i>isRegex</i> flag is set a regular expression match is done with the symbol names. <i>checkCase</i> is used only if <i>isRegex</i> has been set and indicates if we have to ignore case while matching names.
+</div>
+
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func21"); return false;'>
+<b>bool findModule(const string &name, Dyn_Module *&ret)</b>
+</a></div>
+<div id="func21" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ If the module with the name name exists return true with ret containing the module else return false.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func5"); return false;'>
+<b>bool findFuncByEntryOffset(const OFFSET  &offset, Dyn_Symbol *ret)</b>
+</a></div>
+<div id="func5" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Find and return the function symbol with the given offset entry address. If none exists return a false.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func7"); return false;'>
+<b>bool addSymbol(Dyn_Symbol *newsym)</b>
+</a></div>
+<div id="func7" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Add a new symbol <i>newsym</i> to all of the internal data structures. The name of the <i>newsym</i> must be a mangled name. Returns true if it was successfully added.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func8"); return false;'>
+<b>bool getAllSymbolsByType(vector&lt;Dyn_Symbol *&gt; &ret, Dyn_Symbol::SymbolType sType)</b>
+</a></div>
+<div id="func8" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Return all the Symbols of type <i>sType</i> in the object file. Returns true if there is atleast one function with <i>ret</i> containing the symbols.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func10"); return false;'>
+<b>bool getAllModules(vector&lt;module *&gt; &ret)</b>
+</a></div>
+<div id="func10" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Return all the Modules in the object file. Returns true if there is atleast one Module with <i>ret</i> containing the Modules.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func11"); return false;'>
+<b>bool isExec() const</b>
+</a></div>
+<div id="func11" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Returns true if the Object is an executable else returns false.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func12"); return false;'>
+<b>bool isCode(const OFFSET &where) const</b>
+</a></div>
+<div id="func12" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Returns true if the given offset address <i>where</i> is within the text section else returns false.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func13"); return false;'>
+<b>bool isData(const OFFSET &where) const</b>
+</a></div>
+<div id="func13" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Returns true if the given offset address <i>where</i> is within the Data section else returns false.
+</div>
+
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func14"); return false;'>
+<b>bool isValidOffset(const OFFSET &where) const</b>
+</a></div>
+<div id="func14" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Returns true if the given offset address <i>where</i> is a valid address(aligned address/isCode/isData) else returns false.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func15"); return false;'>
+<b>string file() const</b>
+</a></div>
+<div id="func15" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Return the full path name of the object file. Empty if it is a memory image.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func16"); return false;'>
+<b>string name() const</b>
+</a></div>
+<div id="func16" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Return the name(not the full path) of the object file. Empty if its a memory image.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func17"); return false;'>
+<b>char *mem_image() const</b>
+</a></div>
+<div id="func17" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;   border: 1px solid #d8fea; padding: 5px 5px 5px 10px;'>
+ Return the pointer to the object file in memory. Null if its a file on disk and not a memory image.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func18"); return false;'>
+<b>OFFSET codeOffset() const</b></br>
+<b>OFFSET dataOffset() const</b>
+</a></div>
+<div id="func18" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Return the code/data Offset values for the Object.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func19"); return false;'>
+<b>OFFSET dataLength() const</b></br>
+<b>OFFSET codeLength() const</b>
+</a></div>
+<div id="func19" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Return the code/data length values for the Object.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func32"); return false;'>
+<b>Word*  code_ptr ()  const</br>
+   Word*  data_ptr ()  const</b>
+</a></div>
+<div id="func32" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Return  the code/data section pointer the Object.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func20"); return false;'>
+<b>unsigned getNumberOfSymbols() const</b>
+</a></div>
+<div id="func20" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ 
+ Return  the number of symbols in the object file.
+</div>
+ 
+ 
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func25"); return false;'>
+<b>bool findException(OFFSET &addr, Dyn_ExceptionBlock &excp);</b>
+</a></div>
+<div id="func25" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Get the exception block in the Object file at offset <i>addr</i>. Returns false if there is no exception block at the given offset else returns true with <i>excp</i> containing the Dyn_ExceptionBlock.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func26"); return false;'>
+<b>bool findCatchBlock(Dyn_ExceptionBlock &excp, OFFSET addr, unsigned size = 0)</b>
+</a></div>
+<div id="func26" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+Returns true if the Address range addr -> addr+size contains a catch block, with <i>excp</i> pointing to the appropriate block.
+ 
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func22"); return false;'>
+<b>bool getAllExceptions(vector&lt;Dyn_ExceptionBlock *&gt; &exceptions)</b>
+</a></div>
+<div id="func22" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Get all the exception blocks in the Object file. Returns false if there are no exception blocks else returns true with <i>exceptions</i> containing a vector of Dyn_ExceptionBlocks.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func27"); return false;'>
+<b>unsigned getAddressWidth() const</b>
+</a></div>
+<div id="func27" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns the address width of the object file.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func28"); return false;'>
+<b> OFFSET getLoadAddress() const</b>
+</a></div>
+<div id="func28" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns the address of the load section of the object file.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func29"); return false;'>
+<b>OFFSET getEntryAddress() const</b>
+</a></div>
+<div id="func29" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns the virtual address of the entry point of the object file.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func30"); return false;'>
+<b>OFFSET getBaseAddress() const</b>
+</a></div>
+<div id="func30" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns the base address of the object file.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func31"); return false;'>
+<b>enum SymtabError</b>
+</a></div>
+<div id="func31" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ SymtabError can take one of the following values.
+ <ul>
+  <li>Obj_Parsing - An error occured during object parsing(internal error)
+ <li>Syms_To_Functions - An error occured in converting symbols to functions(internal error)
+  <li>Build_Function_Lists  - An error occured while building function Lists(internal error)
+ <li>No_Such_Function - No such function exists with the given inputs
+  <li>No_Such_Variable - No such Variable exists with the given inputs
+ <li>No_Such_Module - No such Module exists with the given inputs
+  <li>No_Such_Symbol - No such symbol exists with the given inputs
+ <li>No_Such_Member - No such Member exists in the archive with the given inputs
+  <li>Not_A_File - Object File to be parsed may be an archive and not a file
+  <li>Not_An_Archive - Object File to be parsed is not an archive
+ </ul>
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func23"); return false;'>
+<b>SymtabError getLastSymtabError()</b>
+</a></div>
+<div id="func23" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Returns the last error that occurred while parsing.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func24"); return false;'>
+<b>string printError(SymtabError serr)</b>
+</a></div>
+<div id="func24" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns a detailed description of the enum value serr.
+</div>
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("class2"); return false;'>
+<h3>Class Dyn_Module</h3><a>
+ This class represents a module which is part of the image. This class also gives all the information pertaining to a module.
+</div>
+
+<div id="class2" style='display: ; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("modenum1"); return false;'>
+<b>enum supportedLanguages</b>
+</a></div>
+<div id="modenum1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ supportedLanguages can take one of the following values.
+ <ul>
+  <li>lang_Unknown
+  <li>lang_Assembly
+ <li>lang_C
+ <li>lang_CPlusPlus
+ <li>lang_GnuCPlusPlus
+  <li>lang_Fortran
+ <li>lang_Fortran_with_pretty_debug
+ <li>lang_CMFortran
+ </ul>
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod1"); return false;'>
+<b>Dyn_Module (supportedLanguages lang, OFFSET addr, string &fullNm,Dyn_Symtab *img)</b>
+</a></div>
+<div id="mod1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Create an object of type Dyn_Module having the language <i>lang</i>, Offset Address <i>addr</i>, complete file name <i>fullNm</i> and is contained in the Dyn_Symtab object <i>img</i>.
+
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod2"); return false;'>
+<b>bool getAllSymbolsByType(vector&lt;Dyn_Symbol *&gt; &ret, Dyn_Symbol::SymbolType sType)</b
+</a></div>
+<div id="mod2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Get all symbols in the module with type <i>sType</i>. Returns true if there is atleast one symbol in the module.
+
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod3"); return false;'>
+<b> bool findSymbolByType(vector &lt;Dyn_Symbol *&gt; &ret, const string &name,
+                                Dyn_Symbol::SymbolType sType, bool isMangled = false,
+                                bool isRegex = false, bool checkCase = false);</b>
+</a></div>
+<div id="mod3" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Find and return a vector of symbols of the type <i>sType</i> in the module where the name matches the given Mangled/Pretty name based on the <i>isMangled</i> flag. <i>ret</i> contains the symbols found. The return value is false if there is no such function name or else true is returned. For any other error that may occur a call to getLastSymtabError() should be made. If the <i>isRegex</i> flag is set a regular expression match is done with the function names. <i>checkCase</i> is used only if <i>isRegex</i> has been set and indicates if we have to ignore case while matching names.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod5"); return false;'>
+<b>bool isShared() const</b></br>
+</a></div>
+<div id="mod5" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Return if the module is shared.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod6"); return false;'>
+<b>const string& fileName() const</b></br>
+<b>const string& fullName() const</b>
+</a></div>
+<div id="mod6" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Return the full Name/ file Name for the module.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod7"); return false;'>
+<b>bool setName(string newName)</b>
+</a></div>
+<div id="mod7" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Set the full name of the module to <i>newName</i>. 
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod8"); return false;'>
+<b>supportedLangugaes language() const</b></br>
+<b>bool setLanguage(supportedLanguages lang)</b>
+</a></div>
+<div id="mod8" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Get the language for the module/ set it to <i>lang</i>. 
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod9"); return false;'>
+<b>OFFSET addr() const</b>
+</a></div>
+<div id="mod9" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Get the offset address for the module. 
+</div>
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("class3"); return false;'>
+<h3>Class Dyn_Symbol</h3><a>
+The Symbol class represents a symbol in the object file. This class holds the symbol information such as the mangled, pretty and typed Names, the module in which it is present, type and linkage, address, size.
+</div>
+
+<div id="class3" style='display: ; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("symenum1"); return false;'>
+<b>enum SymbolType </b>
+</a></div>
+<div id="symenum1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+     Symbol Type can take these values
+     <ul>
+        <li>PDST_UNKNOWN
+        <li>PDST_FUNCTION
+        <li>PDST_OBJECT
+        <li>PDST_MODULE
+        <li>PDST_NOTYPE
+     </ul> 
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("symenum2"); return false;'>
+<b>enum SymbolLinkage </b></br>
+</a></div>
+<div id="symenum2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+     Symbol Linkage can take these values
+     <ul>
+        <li>SL_UNKNOWN
+      <li>SL_GLOBAL
+      <li>SL_LOCAL
+ <li>SL_WEAK
+     </ul>  
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym1"); return false;'>
+<b>Dyn_Symbol (const string &name, Dyn_Module *module,
+    SymbolType stype, SymbolLinkage slinkage, OFFSET addr,
+            Dyn_Section *sec = NULL, unsigned size = 0, void *upPtr = NULL) </b>
+</a></div>
+<div id="sym1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Create an object of class Dyn_Symbol with the mangled name <i>name</i>, module <i>module</i>, the symbol type <i>stype</i>, the symbol linkage <i>slinkage</i>, the section <i>sec</i>, the size <i>size</i> and a void pointer <i>upPtr</i>. The void pointer can be used to store any data in the symbol. This is particularly useful when converting between Dyn_Symbol to any other object.
+
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym14"); return false;'>
+<b>Dyn_Symbol(const Dyn_Symbol &)</b>
+</a></div>
+<div id="sym14" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+  Copy constructor for the Dyn_Symbol class;
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym15"); return false;'>
+bool operator== (const Dyn_Symbol &sym) const;
+</a></div>
+<div id="sym15" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+  Compare the Dyn_Symbol with <i>sym</i>;
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym5"); return false;'>
+ <b>const string& getName () const</br>
+    const string& getPrettyName() const </br>
+    const string& getTypedName() const</br>
+    const Dyn_Module *getModule () const</br>
+    const string &getModuleName () const</br>
+    SymbolType getType() const</br>
+    SymbolLinkage  getLinkage() const</br>
+    OFFSET getAddr() const</br>
+    vector<string> getAllMangledNames() const</br>
+    vector<string> getAllPrettyNames() const</br>
+    vector<string> getAllTypedNames() const</br>
+    unsigned getSize() const</br>
+    Dyn_Section *getSec() const</br>
+    void *getUpPtr() const</b></br>
+
+</a></div>
+<div id="sym5" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Return the appropriate data members of the Class Dyn_Symbol.
+ 
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym2"); return false;'>
+<b>void setModule (Dyn_Module *module)</b>
+</a></div>
+<div id="sym2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Change the Module wo which the symbol belongs to <i>module</i>.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym17"); return false;'>
+<b>void setModuleName (string moduleName)</b>
+</a></div>
+<div id="sym17" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Change the Module name of the symbol to <i>moduleName</i>.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym3"); return false;'>
+<b>void setSize (unsigned ns)</b>
+</a></div>
+<div id="sym3" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Change the size of the symbol to <i>ns</i>.
+
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym4"); return false;'>
+<b>void setAddr(OFFSET newAddr)</b>
+</a></div>
+<div id="sym4" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Change the Address of the symbol to <i>newAddr</i>.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym12"); return false;'>
+<b>bool setType(SymbolType sType)</b>
+</a></div>
+<div id="sym12" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Set the type of the symbol to <i>sType</i>.
+</div>
+
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym13"); return false;'>
+<b>bool setUpPtr(void *newUpPtr)</b>
+</a></div>
+<div id="sym13" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Set the upPtr of the symbol to <i>newUpPtr</i>.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym9"); return false;'>
+<b>bool addMangledName(string name, bool isPrimary = false)</b>
+</a></div>
+<div id="sym9" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Add a mangled name <i>name</i> to the symbol. If <i>isPrimary</i>is true then make it the defualt name for the symbol. This  function also updates the internal data structures accordingly.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym10"); return false;'>
+<b>bool addPrettyName(string name,bool isPrimary = false)</b>
+</a></div>
+<div id="sym10" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Add a pretty name <i>name</i> to the symbol. If <i>isPrimary</i>is true then make it the defualt name for the symbol. This  function also updates the internal data structures accordingly.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym11"); return false;'>
+<b>bool addTypedName(string name, bool isPrimary = false)</b>
+</a></div>
+<div id="sym11" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Add a typed name <i>name</i> to the symbol. If <i>isPrimary</i>is true then make it the defualt name for the symbol. This  function also updates the internal data structures accordingly.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym6"); return false;'>
+<b>bool isWeak()</b>
+</a></div>
+<div id="sym6" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Find if the symbol is weak or not.
+
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym7"); return false;'>
+<b>bool isLocal()</b>
+</a></div>
+<div id="sym7" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Find if the symbol linkage is local or not.
+
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("sym8"); return false;'>
+<b>bool isGlobal()</b>
+</a></div>
+<div id="sym8" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Find if the symbol linkage is global or not.
+</div>
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("class4"); return false;'>
+<h3>Class Dyn_Archive</h3><a>
+ This class represents an archive on AIX. This class has information of all the members in the archives.
+</div>
+<div id="class4" style='display: ; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch1"); return false;'>
+<b>bool openArchive(string &name, Dyn_Archive *&img)</b>
+</a></div>
+<div id="arch1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Create an object of type Dyn_Archive for the archive with name <i>name</i>. Returns true if the file is an archive with <i>img</i> containing the Dyn_Archive object.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch2"); return false;'>
+<b>bool openArchive( char *mem_image, size_t size, Dyn_Symtab *&img)</b>
+</a></div>
+<div id="arch2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Create an object of type Dyn_Archive for the archive in memory with memory pointer <i>mem_image</i> and size <i>size</i>. Returns true if the memory image is an archive with <i>img</i> containing the Dyn_Archive object.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch3"); return false;'>
+<b>bool getMember(string &member_name,Dyn_Symtab *&img)</b>
+</a></div>
+<div id="arch3" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Get the member object handle if at all the member exists in the archive. Returns false if the member with name <i>member_name</i> does not exist else returns true with <i>img</i> containing the member's corresponding Dyn_Symtab Object.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch4"); return false;'>
+<b>bool getMemberByOffset(OFFSET &memberOffset, Dyn_Symtab *&img)</b>
+</a></div>
+<div id="arch4" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Get the member's object handle which is at the OFFSET <i>memberOffset</i> in the Archive. Returns true if it succeeds with <i>img</i> containing the member's corresponding Dyn_Symtab Object.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch5"); return false;'>
+<b>bool getAllMembers(vector &lt;Dyn_Symtab *&gt; &members)</b>
+</a></div>
+<div id="arch5" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Get all the member object handles in the archive. Returns true if succeeds with <i>members</i> containing the Dyn_Symtab Objects for all the members in the archive.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch6"); return false;'>
+<b>bool isMemberInArchive(string &member_name)</b>
+</a></div>
+<div id="arch6" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+Return if the Member with name <i>member_name</i> exists in the archive.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch7"); return false;'>
+<b>SymtabError getLastSymtabError()</b>
+</a></div>
+<div id="arch7" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+ Returns the last error that occurred while parsing the archive.
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch8"); return false;'>
+<b>string printError(SymtabError serr)</b>
+</a></div>
+<div id="arch8" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns a detailed description of the enum value serr.
+</div>
+</div> 
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("class5"); return false;'>
+<h3>Class Dyn_ExceptionBlock</h3><a>
+ This class represents an Exception Block present in the Object file. This class gives all the information pertaining to that Exception Block.
+</div>
+
+<div id="class5" style='display: ; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("excp1"); return false;'>
+<b>bool hasTry() const </b>
+</a></div>
+<div id="excp1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns if the Exception Block has a try block.
+
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("excp2"); return false;'>
+<b> OFFSET tryStart() const </b>
+</a></div>
+<div id="excp2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Get the start offset address of the try block.
+ 
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("excp3"); return false;'>
+<b>OFFSET tryEnd() const </b>
+</a></div>
+<div id="excp3" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Get the End offset address of the try block.
+ 
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("excp4"); return false;'>
+<b>OFFSET trySize() const</b>
+</a></div>
+<div id="excp4" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Get the size of the try block.
+ 
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("excp5"); return false;'>
+<b>OFFSET catchStart() const</b>
+</a></div>
+<div id="excp5" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Get the start address of the catch block.
+ 
+</div>
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("excp6"); return false;'>
+<b>bool contains(OFFSET addr) const</b>
+</a></div>
+<div id="excp6" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Returns if the Offset address <i>addr</i> is contained in the try block.
+</div>
+</p>
+</body>
+</html>
