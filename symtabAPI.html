@@ -63,14 +63,14 @@ The Dyn_Symtab class represents the entire SymtabAPI library. This class is resp
 <div id="class1" style='display: ; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func1"); return false;'>
-<b>bool openFile( string &filename, Dyn_Symtab *&obj)</b>
+<b>static bool openFile( string &filename, Dyn_Symtab *&obj)</b>
 </a></div>
 <div id="func1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 Parse an Object file. <i>filename</i> is the name of the Object file to be parsed. Returns true if the file is parsed without an error along with <i>obj</i> containing the pointer to the Dyn_Symtab class object. Returns false if there was an error.<i>getLastSymtabError()/printSymtabError()</i> should be called to find out the error details.
 </div>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func2"); return false;'>
-<b>bool openFile( char *mem_image, size_t size, Dyn_Symtab *&obj)</b>
+<b>static bool openFile( char *mem_image, size_t size, Dyn_Symtab *&obj)</b>
 </a></div>
 <div id="func2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 Parse a memory image.<i>mem_image</i> is the pointer to the Object file that is in memory to be parsed. <i>size</i> is the size of the memory image. Returns true if the file is parsed without an error along with <i>obj</i> containing the pointer to the Dyn_Symtab class object. Returns false if there was an error.<i>getLastSymtabError()/printSymtabError()</i> should be called to find out the error details.
@@ -285,7 +285,7 @@ Returns true if the Address range addr -> addr+size contains a catch block, with
 </div>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func23"); return false;'>
-<b>SymtabError getLastSymtabError()</b>
+<b>static SymtabError getLastSymtabError()</b>
 </a></div>
 <div id="func23" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 
@@ -293,7 +293,7 @@ Returns true if the Address range addr -> addr+size contains a catch block, with
 </div>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func24"); return false;'>
-<b>string printError(SymtabError serr)</b>
+<b>static string printError(SymtabError serr)</b>
 </a></div>
 <div id="func24" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
  Returns a detailed description of the enum value serr.
@@ -324,13 +324,6 @@ Returns true if the Address range addr -> addr+size contains a catch block, with
  </ul>
 </div>
 
-<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod1"); return false;'>
-<b>Dyn_Module (supportedLanguages lang, OFFSET addr, string &fullNm,Dyn_Symtab *img)</b>
-</a></div>
-<div id="mod1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
- Create an object of type Dyn_Module having the language <i>lang</i>, Offset Address <i>addr</i>, complete file name <i>fullNm</i> and is contained in the Dyn_Symtab object <i>img</i>.
-
-</div>
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("mod2"); return false;'>
 <b>bool getAllSymbolsByType(vector&lt;Dyn_Symbol *&gt; &ret, Dyn_Symbol::SymbolType sType)</b
 </a></div>
@@ -400,11 +393,11 @@ The Symbol class represents a symbol in the object file. This class holds the sy
 <div id="symenum1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
      Symbol Type can take these values
      <ul>
-        <li>PDST_UNKNOWN
-        <li>PDST_FUNCTION
-        <li>PDST_OBJECT
-        <li>PDST_MODULE
-        <li>PDST_NOTYPE
+        <li>ST_UNKNOWN
+        <li>ST_FUNCTION
+        <li>ST_OBJECT
+        <li>ST_MODULE
+        <li>ST_NOTYPE
      </ul> 
 </div>
 
@@ -454,9 +447,9 @@ bool operator== (const Dyn_Symbol &sym) const;
     SymbolType getType() const</br>
     SymbolLinkage  getLinkage() const</br>
     OFFSET getAddr() const</br>
-    vector<string> getAllMangledNames() const</br>
-    vector<string> getAllPrettyNames() const</br>
-    vector<string> getAllTypedNames() const</br>
+    vector&lt;string&gt; getAllMangledNames() const</br>
+    vector&lt;string&gt; getAllPrettyNames() const</br>
+    vector&lt;string&gt; getAllTypedNames() const</br>
     unsigned getSize() const</br>
     Dyn_Section *getSec() const</br>
     void *getUpPtr() const</b></br>
@@ -560,14 +553,14 @@ bool operator== (const Dyn_Symbol &sym) const;
 <div id="class4" style='display: ; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch1"); return false;'>
-<b>bool openArchive(string &name, Dyn_Archive *&img)</b>
+<b>static bool openArchive(string &name, Dyn_Archive *&img)</b>
 </a></div>
 <div id="arch1" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 Create an object of type Dyn_Archive for the archive with name <i>name</i>. Returns true if the file is an archive with <i>img</i> containing the Dyn_Archive object.
 </div>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch2"); return false;'>
-<b>bool openArchive( char *mem_image, size_t size, Dyn_Symtab *&img)</b>
+<b>static bool openArchive( char *mem_image, size_t size, Dyn_Symtab *&img)</b>
 </a></div>
 <div id="arch2" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 Create an object of type Dyn_Archive for the archive in memory with memory pointer <i>mem_image</i> and size <i>size</i>. Returns true if the memory image is an archive with <i>img</i> containing the Dyn_Archive object.
@@ -602,7 +595,7 @@ Return if the Member with name <i>member_name</i> exists in the archive.
 </div>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch7"); return false;'>
-<b>SymtabError getLastSymtabError()</b>
+<b>static SymtabError getLastSymtabError()</b>
 </a></div>
 <div id="arch7" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
 
@@ -610,7 +603,7 @@ Return if the Member with name <i>member_name</i> exists in the archive.
 </div>
 
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("arch8"); return false;'>
-<b>string printError(SymtabError serr)</b>
+<b>static string printError(SymtabError serr)</b>
 </a></div>
 <div id="arch8" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
  Returns a detailed description of the enum value serr.
