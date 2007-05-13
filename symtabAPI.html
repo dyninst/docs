@@ -265,6 +265,20 @@ Returns true if the Address range addr -> addr+size contains a catch block, with
  Returns the base address of the object file.
 </div>
 
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func_export"); return false;'>
+<b>bool exportXML(const string file)</b>
+</a></div>
+<div id="func_export" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Export the object file in XML format. Returns false if there were errors in forming the XML else return true with the XML output written to file <i>file</i>
+</div>
+
+<div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func_emit"); return false;'>
+<b>bool emitSymbols(const string file)</b>
+</a></div>
+<div id="func_emit" style='display: none; background: #fafafa; margin: 3px 0 10px 10px;  border: 1px solid #d8dfea; padding: 5px 5px 5px 10px;'>
+ Emit a new binary into the file <i>file</i> with a new symbol table. Returns true if success.
+</div>
+
 <div style=' padding: 1px;'><a href='#' onclick='toggleVisible("func31"); return false;'>
 <b>enum SymtabError</b>
 </a></div>
@@ -272,15 +286,16 @@ Returns true if the Address range addr -> addr+size contains a catch block, with
  SymtabError can take one of the following values.
  <ul>
   <li>Obj_Parsing - An error occured during object parsing(internal error)
- <li>Syms_To_Functions - An error occured in converting symbols to functions(internal error)
+  <li>Syms_To_Functions - An error occured in converting symbols to functions(internal error)
   <li>Build_Function_Lists  - An error occured while building function Lists(internal error)
- <li>No_Such_Function - No such function exists with the given inputs
+  <li>No_Such_Function - No such function exists with the given inputs
   <li>No_Such_Variable - No such Variable exists with the given inputs
- <li>No_Such_Module - No such Module exists with the given inputs
+  <li>No_Such_Module - No such Module exists with the given inputs
   <li>No_Such_Symbol - No such symbol exists with the given inputs
- <li>No_Such_Member - No such Member exists in the archive with the given inputs
+  <li>No_Such_Member - No such Member exists in the archive with the given inputs
   <li>Not_A_File - Object File to be parsed may be an archive and not a file
   <li>Not_An_Archive - Object File to be parsed is not an archive
+  <li>Export_Error  - Error when dumping into XML
  </ul>
 </div>
 
