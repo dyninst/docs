@@ -116,7 +116,7 @@ void instrumentMemory(BPatch_addressSpace *app) {
   
   // Create a snippet that calls printf with each effective address
   std::vector<BPatch_snippet *> printfArgs;
-  BPatch_snippet *fmt = new BPatch_constExpr("Access at: 0x%lx\n");
+  BPatch_snippet *fmt = new BPatch_constExpr("Access at: %p\n");
   printfArgs.push_back(fmt);
   BPatch_snippet *eae = new BPatch_effectiveAddressExpr;
   printfArgs.push_back(eae);
