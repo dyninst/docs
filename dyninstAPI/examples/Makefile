@@ -19,7 +19,7 @@ CCFLAGS = -g -Wall
 CXX = g++
 CXXFLAGS = -g -Wall -std=c++0x
 
-TARGETS = instrumentFunc binaryAnalysis memoryAccesses InterestingProgram
+TARGETS = instrumentFunc binaryAnalysis memoryAccesses InterestingProgram retee
 all:$(TARGETS)
 
 DYNINST_LIBS = -L$(DYNINST_LIB) \
@@ -39,6 +39,9 @@ binaryAnalysis: binaryAnalysis.o
 	$(CXX) $(CXXFLAGS) -I$(DYNINST_INCLUDE) $(DYNINST_LIBS) -o $@ $^ 
 
 memoryAccesses: memoryAccesses.o
+	$(CXX) $(CXXFLAGS) -I$(DYNINST_INCLUDE) $(DYNINST_LIBS) -o $@ $^ 
+
+retee: retee.o
 	$(CXX) $(CXXFLAGS) -I$(DYNINST_INCLUDE) $(DYNINST_LIBS) -o $@ $^ 
 
 %.o: %.C

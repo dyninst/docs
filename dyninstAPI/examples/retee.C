@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include "BPatch.h"
+#include "BPatch_point.h"
 #include "BPatch_process.h"
 #include "BPatch_function.h"
 #include "BPatch_Vector.h"
